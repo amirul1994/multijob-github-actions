@@ -7,14 +7,28 @@ jobs:
   build:
     name: Build Application
     runs-on: ubuntu-latest
+    env:
+      BUILD_VERSION: 1.0.0
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Print branch name
+        run: echo "the current branch is ${{ github.ref }}"
       
       - name: Build step
         run: |
           echo "Building the application..."
           echo "Build completed successfully!"
+          echo "Build completed successfully!"
+      
+      - name: Build status
+        if: success()
+        run: echo "Build succeeded!"
+      
+      - name: Handle failure
+        if: failure()
+        run: echo "Build failed, please check logs" 
   
   test:
     name: Run tests
@@ -28,6 +42,7 @@ jobs:
   
   deploy:
     name: Deploy Application
+    if: github.ref == 'refs/heads/main'
     needs: [build, test]
     runs-on: ubuntu-latest
     steps:
