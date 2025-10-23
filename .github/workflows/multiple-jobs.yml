@@ -1,0 +1,47 @@
+name: Multiple Jobs Lab
+on:
+  push:
+    branches:
+      - main 
+jobs:
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Build step
+        run: |
+          echo "Building the application..."
+          echo "Build completed successfully!"
+  
+  test:
+    name: Run tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        run: |
+          echo "running tests..."
+          echo "all tests passed!"
+  
+  deploy:
+    name: Deploy Application
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          echo "Deploying application..."
+          echo "Deployment successful"
+
+  notify:
+    name: Send notification
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification
+        run: |
+          echo "sending deployment notification..."
+          echo "notification"        
